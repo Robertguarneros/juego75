@@ -96,11 +96,15 @@ class Juego75 {
     private Baraja baraja;
     private List<Carta> mano;
     private double puntos;
-
+    private Baraja baraja2;
+    private List<Carta> mano2;
+    private double puntos2;
     public Juego75() {
         baraja = new Baraja();
         mano = new ArrayList<>();
         puntos = 0;
+        mano2 = new ArrayList<>();
+        puntos2 = 0;
     }
 
     public void jugar() {
@@ -118,21 +122,57 @@ class Juego75 {
             System.out.println("Carta: " + carta);
             System.out.println("Puntos: " + puntos);
 
-            if (puntos >= 7.5) {
-                System.out.println("Has ganado. Fin del juego.");
+            if (puntos > 7.5) {
+                System.out.println("Has perdido. Fin del juego.");
                 break;
             }
 
             System.out.print("¿Deseas tomar otra carta? (S/N): ");
             String respuesta = scanner.next().trim().toUpperCase();
 
-            if (!respuesta.equals("S")) {
-                break;
+            if (!respuesta.equals("S")&& puntos<=7.5) {
+
+                while (true){
+                    System.out.println("Turno del dealer.");
+                    carta = baraja.sacarCarta();
+                    if (carta == null) {
+                        break;
+                    }
+                    mano2.add(carta);
+                    puntos2 += carta.getValorNumerico();
+
+                    System.out.println("Carta: " + carta);
+                    System.out.println("Puntos: " + puntos2);
+                    String respuestaDealer="";
+                    if(puntos2<7.5){
+                        System.out.print("¿Deseas tomar otra carta? (S/N): ");
+                        respuestaDealer = scanner.next().trim().toUpperCase();
+                    }
+                    if (!respuestaDealer.equals("S")&& puntos2<=7.5){
+                        break;
+                    } else if (puntos2>7.5) {
+                        break;
+                    }
+                }
+
+                if (puntos2 > 7.5) {
+                    System.out.println("Has Ganado. El dealer se ha pasado. Fin del juego.");
+                    break;
+                } else if (puntos>puntos2 && puntos<=7.5) {
+                    System.out.println("Has Ganado. Fin del juego. Tienes:"+puntos+" y el dealer tiene:"+puntos2+".");
+                    break;
+                } else if (puntos2>puntos && puntos2<=7.5) {
+                    System.out.println("Has Perdido. Fin del juego. Tienes:"+puntos+" y el dealer tiene:"+puntos2+".");
+                    break;
+                } else if (puntos2==puntos && puntos2<=7.5 && puntos<=7.5) {
+                    System.out.println("Has empatado. Fin del juego. Tienes:"+puntos+" y el dealer tiene:"+puntos2+".");
+                    break;
+                }else if (carta==null){
+                    System.out.println("No quedan cartas en la baraja. Fin del juego.");
+                    break;
+                }
             }
         }
-
-        System.out.println("Puntos totales: " + puntos);
-
         scanner.close();
     }
 }
